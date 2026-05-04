@@ -43,6 +43,11 @@ public class AutomanagerApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		//Observações e Sobre o projeto:
+		//  EntityModel é um DTO+links do HATEOAS
+		//  ToModel é uma classe em cada controler que converte a entidade para EntityModel, adicionando os links relacionados
+		//  CollectionModel é uma coleção de EntityModel, EntityModel[] + os links de coleçao tipo collection+self ( rota de get all )
+		// Tirando isso não vejo nada além de uma api crud simples, próximos passos que consigo pensar seria o spring Security, dtos e validação de respostas com validator.
 
 		// 1. Criar e salvar empresa (sem usuários — cascade não inclui mais Usuario)
 		Empresa empresa = new Empresa();
@@ -164,7 +169,6 @@ public class AutomanagerApplication implements CommandLineRunner {
 		enderecoFornecedor.setCodigoPostal("20031-170");
 		fornecedor.setEndereco(enderecoFornecedor);
 
-		fornecedor.getMercadorias().add(rodaLigaLeve);
 		fornecedor = repositorioUsuario.save(fornecedor);
 
 		Usuario cliente = new Usuario();
@@ -234,15 +238,34 @@ public class AutomanagerApplication implements CommandLineRunner {
 		rodaLigaLeve2.setValor(300.0);
 		rodaLigaLeve2.setDescricao("Roda de liga leve original de fábrica da toyota para modelos do tipo hatch");
 
+		Mercadoria rodaLigaLeve1Venda = new Mercadoria();
+		rodaLigaLeve1Venda.setCadastro(new Date());
+		rodaLigaLeve1Venda.setFabricao(new Date());
+		rodaLigaLeve1Venda.setNome("Roda de liga leve modelo toyota etios");
+		rodaLigaLeve1Venda.setValidade(new Date());
+		rodaLigaLeve1Venda.setQuantidade(30);
+		rodaLigaLeve1Venda.setValor(300.0);
+		rodaLigaLeve1Venda.setDescricao("Roda de liga leve original de fábrica da toyota para modelos do tipo hatch");
+
+		Servico trocaRodas1Venda = new Servico();
+		trocaRodas1Venda.setDescricao("Troca das rodas do carro por novas");
+		trocaRodas1Venda.setNome("Troca de rodas");
+		trocaRodas1Venda.setValor(50);
+
+		Servico alinhamento1Venda = new Servico();
+		alinhamento1Venda.setDescricao("Alinhamento das rodas do carro");
+		alinhamento1Venda.setNome("Alinhamento de rodas");
+		alinhamento1Venda.setValor(50);
+
 		Venda venda1 = new Venda();
 		venda1.setCadastro(new Date());
 		venda1.setIdentificacao("1234698745");
 		venda1.setClienteId(cliente.getId());
 		venda1.setFuncionarioId(funcionario.getId());
 		venda1.setVeiculoId(veiculo.getId());
-		venda1.getMercadorias().add(rodaLigaLeve);
-		venda1.getServicos().add(trocaRodas);
-		venda1.getServicos().add(alinhamento);
+		venda1.getMercadorias().add(rodaLigaLeve1Venda);
+		venda1.getServicos().add(trocaRodas1Venda);
+		venda1.getServicos().add(alinhamento1Venda);
 
 		Venda venda2 = new Venda();
 		venda2.setCadastro(new Date());
